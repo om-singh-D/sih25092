@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import HeroSection from '@/components/hero-section'
+import FooterSection from '@/components/footer'
 import { Button } from '@/components/ui/button'
 import { InfiniteSlider } from '@/components/ui/infinite-slider'
 import { ProgressiveBlur } from '@/components/ui/progressive-blur'
@@ -15,12 +16,12 @@ const Landing = () => {
             content: (
                 <div>
                     <p className="font-bold md:text-4xl text-xl text-white">
-                        Fast Development
+                        AI-Guided Mental Health Support
                     </p>
                     <p className="font-normal text-base text-white"></p>
                     <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
-                        Build 10x faster with our pre-built, customizable components. 
-                        Save weeks of development time and focus on what matters most - your unique features.
+                        Intelligent chatbot providing 24/7 emotional support with multilingual capabilities. 
+                        Early detection algorithms identify students at risk and provide immediate interventions.
                     </p>
                 </div>
             ),
@@ -32,12 +33,12 @@ const Landing = () => {
             content: (
                 <div>
                     <p className="font-bold md:text-4xl text-xl text-white">
-                        Modern Design
+                        Confidential Counseling
                     </p>
                     <p className="font-normal text-base text-white"></p>
                     <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
-                        Beautiful, responsive designs that work seamlessly across all devices. 
-                        Built with modern design principles and attention to detail.
+                        Secure booking system for anonymous counseling sessions. 
+                        Connect students with professional counselors while maintaining complete privacy.
                     </p>
                 </div>
             ),
@@ -49,12 +50,12 @@ const Landing = () => {
             content: (
                 <div>
                     <p className="font-bold md:text-4xl text-xl text-white">
-                        Performance
+                        Educational Resources
                     </p>
                     <p className="font-normal text-base text-white"></p>
                     <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
-                        Optimized for speed and performance. Lightning-fast load times 
-                        and smooth animations that delight your users.
+                        Comprehensive psychoeducational content covering stress management, 
+                        coping strategies, and mental wellness in regional languages.
                     </p>
                 </div>
             ),
@@ -66,12 +67,12 @@ const Landing = () => {
             content: (
                 <div>
                     <p className="font-bold md:text-4xl text-xl text-white">
-                        Customizable
+                        Data-Driven Insights
                     </p>
                     <p className="font-normal text-base text-white"></p>
                     <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
-                        Highly customizable components that adapt to your brand. 
-                        Change colors, styles, and layouts to match your vision perfectly.
+                        Anonymous analytics dashboard for administrators to track campus mental health trends 
+                        and make informed decisions about student support services.
                     </p>
                 </div>
             ),
@@ -81,11 +82,12 @@ const Landing = () => {
     ];
 
     const testimonials = [
-        "Amazing components that saved us weeks of development time",
-        "Beautiful designs that our users love",
-        "The best component library we've ever used",
-        "Incredible performance and customization options",
-        "Outstanding developer experience",
+        "Transformed how we approach student mental health on campus",
+        "Early intervention capabilities have helped us support at-risk students",
+        "The multilingual support makes mental health accessible to all our students", 
+        "Anonymous analytics provide crucial insights for policy decisions",
+        "Students feel more comfortable seeking help through this platform",
+        "Reduced stigma and increased counseling center efficiency significantly"
     ]
 
     return (
@@ -93,19 +95,94 @@ const Landing = () => {
             {/* Hero Section */}
             <HeroSection />
             
+            {/* Problem Statement Section */}
+            <section className="py-16 md:py-24 bg-muted/30">
+                <div className="container mx-auto px-6 max-w-6xl">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                            Addressing the Mental Health Crisis in Higher Education
+                        </h2>
+                        <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-12">
+                            Students face unprecedented mental health challenges, but existing support systems fall short. 
+                            Our platform bridges the gap with culturally-aware, accessible, and data-driven solutions.
+                        </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="text-center p-6 bg-background rounded-lg shadow-sm border">
+                            <div className="text-3xl md:text-4xl font-bold text-primary mb-2">70%</div>
+                            <p className="text-sm text-muted-foreground">of students experience mental health challenges during college</p>
+                        </div>
+                        <div className="text-center p-6 bg-background rounded-lg shadow-sm border">
+                            <div className="text-3xl md:text-4xl font-bold text-primary mb-2">24/7</div>
+                            <p className="text-sm text-muted-foreground">availability ensures support when students need it most</p>
+                        </div>
+                        <div className="text-center p-6 bg-background rounded-lg shadow-sm border">
+                            <div className="text-3xl md:text-4xl font-bold text-primary mb-2">90%</div>
+                            <p className="text-sm text-muted-foreground">reduction in stigma through anonymous support options</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
             {/* Features Section with Layout Grid */}
-            <section className="py-16 md:py-24">
+            <section id="features" className="py-16 md:py-24">
                 <div className="container mx-auto px-6 max-w-7xl">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                            Why Choose Our Components?
+                            Comprehensive Mental Health Solution
                         </h2>
                         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                            Discover the power of our carefully crafted UI components through these interactive feature cards
+                            Discover our integrated platform designed specifically for higher education institutions to support student mental wellness
                         </p>
                     </div>
                     
                     <LayoutGrid cards={featureCards} />
+                </div>
+            </section>
+
+            {/* Security & Privacy Section */}
+            <section className="py-16 md:py-24 bg-primary/5">
+                <div className="container mx-auto px-6 max-w-6xl">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                            Privacy & Security First
+                        </h2>
+                        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                            We understand the sensitive nature of mental health data. Our platform is built with enterprise-grade security and complete anonymity.
+                        </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="text-center p-6">
+                            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                <span className="text-2xl">🔒</span>
+                            </div>
+                            <h3 className="font-semibold mb-2">End-to-End Encryption</h3>
+                            <p className="text-sm text-muted-foreground">All communications and data are fully encrypted</p>
+                        </div>
+                        <div className="text-center p-6">
+                            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                <span className="text-2xl">👤</span>
+                            </div>
+                            <h3 className="font-semibold mb-2">Anonymous Access</h3>
+                            <p className="text-sm text-muted-foreground">Students can access support without revealing identity</p>
+                        </div>
+                        <div className="text-center p-6">
+                            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                <span className="text-2xl">📋</span>
+                            </div>
+                            <h3 className="font-semibold mb-2">HIPAA Compliant</h3>
+                            <p className="text-sm text-muted-foreground">Meets all healthcare data protection standards</p>
+                        </div>
+                        <div className="text-center p-6">
+                            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                <span className="text-2xl">🌐</span>
+                            </div>
+                            <h3 className="font-semibold mb-2">Regional Compliance</h3>
+                            <p className="text-sm text-muted-foreground">Adheres to local data protection laws</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -114,10 +191,10 @@ const Landing = () => {
                 <div className="container mx-auto px-6 max-w-6xl">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                            What Developers Say
+                            What Institutions Say
                         </h2>
                         <p className="text-lg text-muted-foreground">
-                            Trusted by developers worldwide
+                            Trusted by universities and colleges nationwide
                         </p>
                     </div>
                     
@@ -146,8 +223,8 @@ const Landing = () => {
                                             <span className="text-sm">👤</span>
                                         </div>
                                         <div>
-                                            <p className="font-medium text-sm">Developer #{index + 1}</p>
-                                            <p className="text-xs text-muted-foreground">Tech Company</p>
+                                            <p className="font-medium text-sm">Student Affairs Director</p>
+                                            <p className="text-xs text-muted-foreground">University #{index + 1}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -158,25 +235,25 @@ const Landing = () => {
             </section>
 
             {/* CTA Section */}
-            <section className="py-16 md:py-24 bg-primary/5">
+            <section id="demo" className="py-16 md:py-24 bg-primary/5">
                 <div className="container mx-auto px-6 max-w-4xl text-center">
                     <div className="relative">
                         <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                            Ready to Start Building?
+                            Ready to Transform Student Mental Health?
                         </h2>
                         <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                            Join thousands of developers who are already building amazing apps with our components
+                            Join leading educational institutions in creating a supportive environment where every student can thrive mentally and academically
                         </p>
                         
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                             <Button asChild size="lg" className="px-8">
-                                <Link href="#start">
-                                    Get Started Now
+                                <Link href="#demo">
+                                    Schedule Consultation
                                 </Link>
                             </Button>
                             <Button asChild size="lg" variant="outline" className="px-8">
-                                <Link href="#docs">
-                                    View Documentation
+                                <Link href="#features">
+                                    View Platform Demo
                                 </Link>
                             </Button>
                         </div>
@@ -192,15 +269,7 @@ const Landing = () => {
             </section>
 
             {/* Footer */}
-            <footer className="py-12 border-t">
-                <div className="container mx-auto px-6 max-w-6xl">
-                    <div className="text-center">
-                        <p className="text-muted-foreground">
-                            © 2025 NS Components. Built with Next.js and modern UI components.
-                        </p>
-                    </div>
-                </div>
-            </footer>
+            <FooterSection />
         </div>
     )
 }
