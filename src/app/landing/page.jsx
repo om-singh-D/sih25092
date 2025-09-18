@@ -235,7 +235,7 @@ const Landing = () => {
             </section>
 
             {/* CTA Section */}
-            <section id="demo" className="py-16 md:py-24 bg-primary/5">
+            <section className="py-16 md:py-24 bg-primary/5">
                 <div className="container mx-auto px-6 max-w-4xl text-center">
                     <div className="relative">
                         <h2 className="text-3xl md:text-4xl font-bold mb-6">
@@ -246,14 +246,9 @@ const Landing = () => {
                         </p>
                         
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <Button asChild size="lg" className="px-8">
-                                <Link href="#demo">
-                                    Schedule Consultation
-                                </Link>
-                            </Button>
-                            <Button asChild size="lg" variant="outline" className="px-8">
-                                <Link href="#features">
-                                    View Platform Demo
+                            <Button asChild size="lg" className="px-8 bg-green-600 hover:bg-green-700">
+                                <Link href="/anonymous-session">
+                                    Get Help Anonymously
                                 </Link>
                             </Button>
                         </div>
