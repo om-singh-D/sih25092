@@ -27,8 +27,8 @@ export default function HeroSection() {
                                         </Link>
                                     </Button>
                                     <Button key={2} asChild size="lg" variant="ghost" className="px-5 text-base">
-                                        <Link href="#features">
-                                            <span className="text-nowrap">Explore Features</span>
+                                        <Link href="#psychoeducation">
+                                            <span className="text-nowrap">Explore Psychoeducation</span>
                                         </Link>
                                     </Button>
                                 </div>
