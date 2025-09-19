@@ -26,7 +26,7 @@ const Landing = () => {
                 </div>
             ),
             className: "md:col-span-2",
-            thumbnail: "/features/1151242.jpg"
+            thumbnail: "/features/ai-guided-mental-health-support.png"
         },
         {
             id: 2,
@@ -43,14 +43,14 @@ const Landing = () => {
                 </div>
             ),
             className: "col-span-1",
-            thumbnail: "/features/1151243.jpg"
+            thumbnail: "/features/confidential-councelling.png"
         },
         {
             id: 3,
             content: (
                 <div>
                     <p className="font-bold md:text-4xl text-xl text-white">
-                        Educational Resources
+                        Psychoeducational Hub
                     </p>
                     <p className="font-normal text-base text-white"></p>
                     <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
@@ -60,24 +60,24 @@ const Landing = () => {
                 </div>
             ),
             className: "col-span-1",
-            thumbnail: "/features/1214925.jpg"
+            thumbnail: "/features/educational-resource.png"
         },
         {
             id: 4,
             content: (
                 <div>
                     <p className="font-bold md:text-4xl text-xl text-white">
-                        Data-Driven Insights
+                        Mood Assessment Tools
                     </p>
                     <p className="font-normal text-base text-white"></p>
                     <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
-                        Anonymous analytics dashboard for administrators to track campus mental health trends 
-                        and make informed decisions about student support services.
+                        Comprehensive mood analysis using standardized psychological screening tools like PHQ-9, GAD-7, 
+                        and GHQ to assess problem severity levels and provide personalized intervention strategies.
                     </p>
                 </div>
             ),
             className: "md:col-span-2",
-            thumbnail: "/features/1216465.jpg"
+            thumbnail: "/features/mood-analysis.png"
         },
     ];
 

@@ -8,7 +8,6 @@ import React from 'react'
 
 const menuItems = [
     { name: 'Psychoeducation Hub', href: '#psychoeducation' },
-    { name: 'About', href: '#about' },
 ]
 
 export const HeroHeader = () => {
@@ -89,6 +88,24 @@ export const HeroHeader = () => {
                                             </Link>
                                         </li>
                                     ))}
+                                    {user && user.role !== 'admin' && (
+                                        <>
+                                            <li>
+                                                <Link
+                                                    href="/peer-forum"
+                                                    className="text-muted-foreground hover:text-accent-foreground block duration-150">
+                                                    <span>Peer Forum</span>
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href="/mood-assessment"
+                                                    className="text-muted-foreground hover:text-accent-foreground block duration-150">
+                                                    <span>Mood Assessment</span>
+                                                </Link>
+                                            </li>
+                                        </>
+                                    )}
                                     {user && (
                                         <li>
                                             <Link
@@ -115,6 +132,24 @@ export const HeroHeader = () => {
                                             </Link>
                                         </li>
                                     ))}
+                                    {user && user.role !== 'admin' && (
+                                        <>
+                                            <li>
+                                                <Link
+                                                    href="/peer-forum"
+                                                    className="text-muted-foreground hover:text-accent-foreground block duration-150">
+                                                    <span>Peer Forum</span>
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href="/mood-assessment"
+                                                    className="text-muted-foreground hover:text-accent-foreground block duration-150">
+                                                    <span>Mood Assessment</span>
+                                                </Link>
+                                            </li>
+                                        </>
+                                    )}
                                     {user && (
                                         <li>
                                             <Link

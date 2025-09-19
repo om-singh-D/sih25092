@@ -124,6 +124,8 @@ const AnimatedAvatar = ({ isOpen }) => {
 export default function Home() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showChatIcon, setShowChatIcon] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
   const [messages, setMessages] = useState([
     {
       id: 'initial',
@@ -133,10 +135,35 @@ export default function Home() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [suggestedActions, setSuggestedActions] = useState([]);
+  const [userContext, setUserContext] = useState({
+    currentMood: 'unknown',
+    recentActivity: 'none',
+    riskLevel: 'low',
+    preferences: 'none',
+    sessionId: `session-${Date.now()}`,
+    conversationTopic: 'general',
+    lastInteraction: new Date().toISOString()
+  });
   const chatContainerRef = useRef(null);
   const chatIconRef = useRef(null);
   const messagesEndRef = useRef(null);
   const scrollAreaRef = useRef(null);
+
+  // Check authentication status on component mount
+  const checkAuthStatus = async () => {
+    try {
+      const response = await fetch('/api/users/me')
+      const data = await response.json()
+      if (data.user) {
+        setUser(data.user)
+      }
+    } catch (error) {
+      console.error('Error checking auth status:', error)
+    } finally {
+      setIsLoadingUser(false)
+    }
+  }
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -154,9 +181,11 @@ export default function Home() {
     setMessages(updatedMessages);
     setInput('');
     setIsLoading(true);
+    setSuggestedActions([]); // Clear previous suggestions
 
     try {
       console.log('Sending messages to API:', updatedMessages);
+      console.log('User context:', userContext);
       
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -164,7 +193,8 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          messages: updatedMessages 
+          messages: updatedMessages,
+          userContext: userContext
         }),
       });
 
@@ -181,9 +211,27 @@ export default function Home() {
         id: `assistant-${Date.now()}`,
         role: 'assistant',
         content: data.content || data.response || 'I apologize, but I encountered an error. Please try again.',
+        suggestedActions: data.suggestedActions || [],
+        metadata: data.metadata || {}
       };
 
       setMessages(prev => [...prev, assistantMessage]);
+      
+      // Handle suggested actions
+      if (data.suggestedActions && data.suggestedActions.length > 0) {
+        setSuggestedActions(data.suggestedActions);
+      }
+      
+      // Update user context based on response
+      if (data.metadata) {
+        setUserContext(prev => ({
+          ...prev,
+          conversationTopic: data.metadata.detectedTopic || prev.conversationTopic,
+          riskLevel: data.metadata.riskLevel || prev.riskLevel,
+          lastInteraction: data.metadata.timestamp || new Date().toISOString()
+        }));
+      }
+      
     } catch (error) {
       console.error('Chat error:', error);
       const errorMessage = {
@@ -199,6 +247,50 @@ export default function Home() {
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
+  };
+
+  // Handle suggested action clicks
+  const handleActionClick = (action) => {
+    console.log('Action clicked:', action);
+    
+    // Update user context based on action taken
+    setUserContext(prev => ({
+      ...prev,
+      recentActivity: action.action,
+      lastInteraction: new Date().toISOString()
+    }));
+    
+    // Clear suggested actions after selection
+    setSuggestedActions([]);
+    
+    // Here you would typically route to different parts of your app
+    switch (action.action) {
+      case 'book_counseling':
+      case 'schedule_appointment':
+        // Route to counseling booking page
+        console.log('Routing to counseling booking...');
+        // window.location.href = '/consult';
+        break;
+      case 'join_peer_forum':
+      case 'connect_peers':
+        // Route to peer forum
+        console.log('Routing to peer forum...');
+        // window.location.href = '/forum';
+        break;
+      case 'explore_resources':
+      case 'education_hub':
+        // Route to resources page
+        console.log('Routing to resources...');
+        // window.location.href = '/resources';
+        break;
+      case 'wellness_plan':
+      case 'save_techniques':
+        // Open wellness plan or save current conversation
+        console.log('Opening wellness plan...');
+        break;
+      default:
+        console.log('Unknown action:', action.action);
+    }
   };
 
   // Auto-scroll to bottom of messages
@@ -223,6 +315,48 @@ export default function Home() {
     }
   };
 
+  // Save conversation context to localStorage
+  const saveConversationContext = (context) => {
+    try {
+      localStorage.setItem('chatContext', JSON.stringify(context));
+    } catch (error) {
+      console.error('Failed to save conversation context:', error);
+    }
+  };
+
+  // Load conversation context from localStorage
+  const loadConversationContext = () => {
+    try {
+      const saved = localStorage.getItem('chatContext');
+      if (saved) {
+        const context = JSON.parse(saved);
+        // Only load if session is less than 24 hours old
+        const sessionAge = Date.now() - new Date(context.lastInteraction).getTime();
+        if (sessionAge < 24 * 60 * 60 * 1000) { // 24 hours
+          return context;
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load conversation context:', error);
+    }
+    return null;
+  };
+
+  // Initialize context from localStorage on component mount
+  useEffect(() => {
+    const savedContext = loadConversationContext();
+    if (savedContext) {
+      setUserContext(savedContext);
+    }
+    // Check authentication status
+    checkAuthStatus();
+  }, []);
+
+  // Save context whenever it changes
+  useEffect(() => {
+    saveConversationContext(userContext);
+  }, [userContext]);
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -230,7 +364,8 @@ export default function Home() {
   useEffect(() => {
 
     const handleScroll =() => {
-      if (window.scrollY > 200) {
+      // Only show chat icon if user is logged in, is a student (not admin), and has scrolled down
+      if (window.scrollY > 200 && user && user.role !== 'admin') {
         setShowChatIcon(true);
       } else {
         setShowChatIcon(false);
@@ -245,7 +380,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [user]); // Add user as dependency
 
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
@@ -364,6 +499,41 @@ export default function Home() {
                   </div>
                 </div>
               )}
+              
+              {/* Suggested Actions */}
+              {suggestedActions.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="flex justify-start"
+                >
+                  <div className="max-w-[80%] space-y-2">
+                    <p className="text-xs text-muted-foreground px-3">Suggested actions:</p>
+                    <div className="flex flex-col gap-2">
+                      {suggestedActions.map((action, index) => (
+                        <motion.button
+                          key={index}
+                          onClick={() => handleActionClick(action)}
+                          className="text-left p-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors duration-200"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <div className="font-medium text-blue-900 text-sm">
+                            {action.title}
+                          </div>
+                          {action.description && (
+                            <div className="text-xs text-blue-700 mt-1">
+                              {action.description}
+                            </div>
+                          )}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+              
               <div ref={messagesEndRef} />
             </div>
             <ScrollBar orientation="vertical" />
