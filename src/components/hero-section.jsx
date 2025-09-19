@@ -36,8 +36,8 @@ export default function HeroSection() {
                             <div className="relative">
                                 <Image
                                     className="w-full h-auto"
-                                    src="/landing/mental-help-img.jpg"
-                                    alt="Mental Health Illustration"
+                                    src="/landing/generated-image.png"
+                                    alt="Mental Health Support Illustration"
                                     height="4000"
                                     width="3000"
                                     priority />

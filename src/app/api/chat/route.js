@@ -5,17 +5,38 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function POST(req) {
   try {
-    const { message } = await req.json();
+    // Check if API key is available
+    if (!process.env.GEMINI_API_KEY) {
+      console.error('GEMINI_API_KEY is not set in environment variables');
+      return NextResponse.json({
+        id: `msg-${Date.now()}`,
+        role: 'assistant',
+        content: "I'm sorry, but my AI service is not properly configured. Please contact support."
+      });
+    }
 
-    if (!message) {
+    const { messages } = await req.json();
+
+    if (!messages || messages.length === 0) {
       return NextResponse.json(
-        { error: 'Message is required' },
+        { error: 'Messages are required' },
         { status: 400 }
       );
     }
 
-    // Get the generative model
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    // Get the latest user message
+    const userMessage = messages[messages.length - 1].content;
+
+    // List of models to try (free tier compatible)
+    const modelsToTry = [
+      'gemini-1.5-flash',
+      'gemini-1.5-flash-latest', 
+      'gemini-pro',
+      'models/gemini-1.5-flash'
+    ];
+
+    let result;
+    let lastError;
 
     // Mental health focused prompt
     const prompt = `You are a compassionate AI mental health companion for college students. Your role is to:
@@ -33,21 +54,68 @@ export async function POST(req) {
     - Don't diagnose or provide medical advice
     - Focus on emotional support and coping strategies
 
-    Student message: "${message}"
+    Student message: "${userMessage}"
 
     Respond as a caring mental health companion:`;
 
-    const result = await model.generateContent(prompt);
+    // Try different models until one works
+    for (const modelName of modelsToTry) {
+      try {
+        console.log(`Trying model: ${modelName}`);
+        const model = genAI.getGenerativeModel({ model: modelName });
+        
+        console.log('Calling Gemini API with user message:', userMessage);
+        result = await model.generateContent(prompt);
+        
+        // If we get here, the model worked
+        console.log('Successfully got response from model:', modelName);
+        break;
+        
+      } catch (error) {
+        console.log(`Model ${modelName} failed:`, error.message);
+        lastError = error;
+        continue;
+      }
+    }
+
+    // If no model worked, throw the last error
+    if (!result) {
+      console.error('All models failed. Last error:', lastError);
+      throw lastError || new Error('All models failed');
+    }
+    
     const response = await result.response;
     const text = response.text();
 
-    return NextResponse.json({ response: text });
+    console.log('Gemini API response received successfully:', text.substring(0, 100) + '...');
+
+    // Return in the format expected by useChat hook
+    return NextResponse.json({
+      id: `msg-${Date.now()}`,
+      role: 'assistant',
+      content: text
+    });
+
   } catch (error) {
-    console.error('Error calling Gemini API:', error);
+    console.error('Detailed error calling Gemini API:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
     
-    // Fallback response
-    const fallbackResponse = "I'm here to listen and support you. It seems I'm having trouble connecting right now, but please know that your feelings are important. If you're in crisis, please reach out to the 988 Suicide & Crisis Lifeline or contact emergency services.";
+    // More specific fallback response based on error type
+    let fallbackMessage = "I'm here to listen and support you. It seems I'm having trouble connecting right now, but please know that your feelings are important. If you're in crisis, please reach out to the 988 Suicide & Crisis Lifeline or contact emergency services.";
     
-    return NextResponse.json({ response: fallbackResponse });
+    if (error.message?.includes('API_KEY')) {
+      fallbackMessage = "I'm experiencing a configuration issue. Please try again in a moment or contact support if the problem persists.";
+    } else if (error.message?.includes('quota')) {
+      fallbackMessage = "I'm temporarily unavailable due to high usage. Please try again in a few minutes.";
+    }
+    
+    return NextResponse.json({
+      id: `msg-${Date.now()}`,
+      role: 'assistant', 
+      content: fallbackMessage
+    });
   }
 }
