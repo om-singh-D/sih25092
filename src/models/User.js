@@ -68,8 +68,7 @@ const UserSchema = new mongoose.Schema({
   collection: 'users'
 });
 
-// Indexes for better performance
-UserSchema.index({ email: 1 });
+// Indexes for better performance (email index is already created by unique: true)
 UserSchema.index({ role: 1 });
 UserSchema.index({ isActive: 1 });
 
